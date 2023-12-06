@@ -9,12 +9,42 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='plugins.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='datatables.min.css') }}">
-    <!-- Thêm đường link đến lodash -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
-    <!-- Thêm đường link đến lodash.debounce -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/esm/utils/debounce.min.js"></script>
     <title>Music Recommendation App</title>
     <style>
+        .img_about{
+            min-height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .heading-text.heading-section h4{
+            position: relative;
+            line-height: 56px;
+            margin-bottom: 60px;
+        }
+
+        .heading-text.heading-section h4:before {
+            content: "";
+            position: absolute;
+            height: 2px;
+            width: 100px;
+            background-color: #2250fc;
+            bottom: -30px;
+            left: 0;
+            right: 0;
+        }
+
+        .descriptive_img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .accordion .ac-item .ac-content {
+            text-align: center;
+        }
+
         .bg-w {
             background-color: #fff !important;
         }
@@ -153,52 +183,216 @@
     <!--end: Inspiro Slider -->
     <!-- Content -->
     <section id="page-content" class="p-b-60 p-t-60">
-        <div class="container">
-            <div class="row">
-                <div class="form-group col-9">
-                    <label>Choose your song</label>
-                    <div class="input-group mb-3">
-                        <!-- Thêm id="songSelect" vào đây -->
-                        <select class="js-data-example-ajax form-select" id="songSelect" multiple="multiple"></select>
-                    </div>
-                </div>
-                <div class="form-group col-3">
-                    <label></label>
-                    <div class="input-group mb-3">
-                        <button id="recommendationsButton"
-                            class="btn btn-light">Get Recommendations</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div class="container">
-            <!-- DataTable -->
-            <div class="row">
-                <!-- <div class="col-lg-6">
-                    <table id="datatable" class="table table-bordered table-hover" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>User's Songs</th>
-                            </tr>
-                        </thead>
-                        <tbody id="userSongsBody"></tbody>
-                    </table>
-                </div> -->
-                <div class="col-lg-12">
-                    <table id="datatable-2" class="table table-bordered table-hover" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Recommendations</th>
-                            </tr>
-                        </thead>
-                        <tbody id="recommendationsBody"></tbody>
-                    </table>
+            <div class="content col-lg-12">
+                <div class="tabs">
+                    <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="recommendation-tab" data-bs-toggle="tab"
+                                href="#recommendation" role="tab" aria-controls="recommendation"
+                                aria-selected="true">Recommendation</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="statistic-tab" data-bs-toggle="tab" href="#statistic" role="tab"
+                                aria-controls="statistic" aria-selected="false">Statistics</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="systems-tab" data-bs-toggle="tab" href="#systems" role="tab"
+                                aria-controls="systems" aria-selected="false">About the system</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="recommendation" role="tabpanel"
+                            aria-labelledby="recommendation-tab">
+                            <div class="row">
+                                <div class="form-group col-9">
+                                    <label>Choose your song</label>
+                                    <div class="input-group mb-3">
+                                        <select class="js-data-example-ajax form-select" id="songSelect"
+                                            multiple="multiple"></select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-3">
+                                    <label></label>
+                                    <div class="input-group mb-3">
+                                        <button id="recommendationsButton" class="btn btn-light">Get
+                                            Recommendations</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- DataTable -->
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <table id="datatable-2" class="table table-bordered table-hover" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Recommendations</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recommendationsBody"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- end: DataTable -->
+                        </div>
+                        <div class="tab-pane fade" id="statistic" role="tabpanel" aria-labelledby="statistic-tab">
+                            <div class="row">
+                                <h4>Statistics</h4>
+                                <div class="toggle accordion">
+                                    <div class="ac-item">
+                                        <h5 class="ac-title">Top 10 most listened song</h5>
+                                        <div class="ac-content">
+                                            <img src="../static/top-10-most-listened-song.png" class="">
+                                        </div>
+                                    </div>
+                                    <div class="ac-item">
+                                        <h5 class="ac-title">Top 10 most popular artists</h5>
+                                        <div class="ac-content">
+                                            <img src="../static/top_10_most_popular_artists.png" class="">
+                                        </div>
+                                    </div>
+                                    <div class="ac-item">
+                                        <h5 class="ac-title">Song play count</h5>
+                                        <div class="ac-content">
+                                            <img src="../static/song_play_count.png" class="">
+                                        </div>
+                                    </div>
+                                    <div class="ac-item">
+                                        <h5 class="ac-title">Distribution song count for user</h5>
+                                        <div class="ac-content">
+                                            <img src="../static/distribution_song_count_for_user.png" class="">
+                                        </div>
+                                    </div>
+                                    <div class="ac-item">
+                                        <h5 class="ac-title">Descriptive statics</h5>
+                                        <div class="ac-content">
+                                            <img src="../static/descriptive_statics.png" class="descriptive_img">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="systems" role="tabpanel" aria-labelledby="systems-tab">
+                            <div class="container m-t-60">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="heading-text heading-section">
+                                            <h4>System overview</h4>
+                                            <span style="color: blue; font-size: 25px;">Welcome to our system!</span>
+                                            <br>
+                                            <span class="lead">Here's how we operate to provide you with the best music experience:</span>
+                                            <br>
+                                            <span class="lead">1. Data Collection
+                                                - First and foremost, we collect data on songs and users' music preferences. (format .csv)
+                                            </span>
+                                            <br>
+                                            <span class="lead">2. Data Processing and Cleaning
+                                                - The collected data then undergoes a processing and cleaning procedure to ensure quality and reliability.
+                                            </span>
+                                            <br>
+                                            <span class="lead">3. Data Splitting
+                                                - After cleaning, the data is divided into two parts: a training dataset and an evaluation dataset (test). The training portion is used to 'teach' the model, while the evaluation part helps us assess the model's performance.
+                                            </span>
+                                            <br>
+                                            <span class="lead">4. Model Training
+                                                - Utilizing the training dataset, we train a recommendation model. This model learns from the data to provide suggestions tailored to your music taste.
+                                             </span>
+                                            <br>
+                                            <span class="lead">5. API Deployment
+                                                - Once the model is trained and tested, we deploy it as an API, enabling seamless integration into applications and offering recommendation services.
+                                            </span>
+                                            <br>
+                                            <span class="lead">6. Heroku Deployment
+                                                - We use the Heroku platform to deploy our application. Heroku makes it easy for us to deploy, manage, and maintain the application without much technical complexity.
+                                            </span>
+                                            <br>
+                                            <span class="lead">All these steps are geared towards providing you with the best music listening experience. We hope you enjoy and discover songs that perfectly match your musical preferences!"</span>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <img src="../static/systems.png" class="descriptive_img">
+                                    </div>
+                                </div>
+
+                                <div class="row m-t-60">
+                                    <div class="col-lg-6 img_about">
+                                        <img src="../static/collaborative.png" class="descriptive_img" style="scale: 1.3;">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="heading-text heading-section">
+                                            <h4>Collaborative Filtering (CF)</h4>
+                                            <span class="lead">- Collaborative Filtering helps recommend songs based on
+                                                the behavior and preferences of other users.</span>
+                                            <br>
+                                            <span class="lead">- For each song that the user has listened to, the
+                                                collaborative filtering model predicts the user's interest in unlistened
+                                                songs by comparing it with other users who have similar
+                                                preferences.</span>
+                                            <br>
+                                            <span class="lead">- Result: A list of songs ranked based on the user's
+                                                likelihood of interest, considering other users.</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row m-t-60">
+                                    <div class="col-lg-6">
+                                        <div class="heading-text heading-section">
+                                            <h4>Content-Based Filtering (CBF)</h4>
+                                            <span class="lead">- Collaborative Filtering helps recommend songs based on
+                                                the behavior and preferences of other users.</span>
+                                            <br>
+                                            <span class="lead">- For each song that the user has listened to, the
+                                                collaborative filtering model predicts the user's interest in unlistened
+                                                songs by comparing it with other users who have similar
+                                                preferences.</span>
+                                            <br>
+                                            <span class="lead">- Result: A list of songs ranked based on the user's
+                                                likelihood of interest, considering other users.</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 img_about">
+                                        <img src="../static/content-Based.png" class="descriptive_img">
+                                    </div>
+                                </div>
+
+                                <div class="row m-t-60">
+                                    <div class="col-lg-6 img_about">
+                                        <img src="../static/hybrid.png" class="descriptive_img">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="heading-text heading-section">
+                                            <h4>Hybrid Recommendations</h4>
+                                            <span class="lead">- To generate the final result, both results are combined.</span>
+                                            <br>
+                                            <span class="lead">- A simple combining function, possibly a simple average or a weight, is applied to the results from each model.</span>
+                                            <br>
+                                            <span class="lead">- Songs that the user has listened to are removed from the final recommended list to ensure uniqueness</span>
+                                            <br>
+                                            <span class="lead">The final result is a list of songs ranked based on the combination of both methods. The way each model contributes to the recommendation list is adjusted through their combination, and songs that the user has listened to before will not appear in the list to ensure uniqueness. Collaborative Filtering and Content-Based Filtering, working together harmoniously, bring you a tailored list of songs to elevate your music experience. Enjoy the tunes!</span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <!-- end: DataTable -->
+
+
+
+
+        </div>
+
+        <div class="container p-t-60">
+
         </div>
     </section>
+
     <section class="background-grey">
         <div class="container">
             <div class="heading-text heading-section text-center">
@@ -216,19 +410,20 @@
                             <span>Student ID: 12310380</span>
                             <p>Member</p>
                             <div class="align-center">
-                                <a class="btn btn-xs btn-slide btn-light" href="#">
+                                <a class="btn btn-xs btn-slide btn-light" href="https://www.facebook.com/hoa.rubi.39">
                                     <i class="fab fa-facebook-f"></i>
                                     <span>Facebook</span>
                                 </a>
-                                <a class="btn btn-xs btn-slide btn-light" href="#" data-width="100">
-                                    <i class="fab fa-twitter"></i>
-                                    <span>Twitter</span>
+                                <a class="btn btn-xs btn-slide btn-light" href="https://www.linkedin.com/in/le-hoa-62998a247/" data-width="100">
+                                    <i class="fab fa-linkedin-in"></i>
+                                    <span>LinkedIn</span>
                                 </a>
-                                <a class="btn btn-xs btn-slide btn-light" href="#" data-width="118">
+                                <a class="btn btn-xs btn-slide btn-light" href="https://www.instagram.com/hoa.le.2811/" data-width="118">
                                     <i class="fab fa-instagram"></i>
                                     <span>Instagram</span>
                                 </a>
-                                <a class="btn btn-xs btn-slide btn-light" href="mailto:#" data-width="80">
+                                <a class="btn btn-xs btn-slide btn-light" href="mailto:thi-hoa.le@etu.univ-lyon1.fr"
+                                    data-width="80">
                                     <i class="fa fa-envelope"></i>
                                     <span>Mail</span>
                                 </a>
@@ -245,19 +440,20 @@
                             <span>Student ID: 12310487</span>
                             <p>Member</p>
                             <div class="align-center">
-                                <a class="btn btn-xs btn-slide btn-light" href="#">
+                                <a class="btn btn-xs btn-slide btn-light" href="https://www.facebook.com/until.you.50552/">
                                     <i class="fab fa-facebook-f"></i>
                                     <span>Facebook</span>
                                 </a>
                                 <a class="btn btn-xs btn-slide btn-light" href="#" data-width="100">
-                                    <i class="fab fa-twitter"></i>
-                                    <span>Twitter</span>
+                                    <i class="fab fa-linkedin-in"></i>
+                                    <span>LinkedIn</span>
                                 </a>
                                 <a class="btn btn-xs btn-slide btn-light" href="#" data-width="118">
                                     <i class="fab fa-instagram"></i>
                                     <span>Instagram</span>
                                 </a>
-                                <a class="btn btn-xs btn-slide btn-light" href="mailto:#" data-width="80">
+                                <a class="btn btn-xs btn-slide btn-light" href="mailto:#hai-linh.tran@etu.univ-lyon1.fr"
+                                    data-width="80">
                                     <i class="fa fa-envelope"></i>
                                     <span>Mail</span>
                                 </a>
@@ -279,8 +475,8 @@
                                     <span>Facebook</span>
                                 </a>
                                 <a class="btn btn-xs btn-slide btn-light" href="#" data-width="100">
-                                    <i class="fab fa-twitter"></i>
-                                    <span>Twitter</span>
+                                    <i class="fab fa-linkedin-in"></i>
+                                    <span>LinkedIn</span>
                                 </a>
                                 <a class="btn btn-xs btn-slide btn-light" href="#" data-width="118">
                                     <i class="fab fa-instagram"></i>
@@ -384,7 +580,7 @@
                 debugger;
                 // var songSelect = document.getElementById("songSelect");
                 // var selectedUser = songSelect.options[songSelect.selectedIndex].value;
-                var selectedOptions = Array.from(songSelect.selectedOptions).map(option => option.value);
+                var selectedOptions = Array.from(songSelect.selectedOptions).map(option => option.text);
 
                 fetch('/recommend', {
                         method: 'POST',
@@ -397,20 +593,13 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        // var userSongsBody = document.getElementById("userSongsBody");
-                        // userSongsBody.innerHTML = "";
-                        // data.user_songs.forEach((userSong, index) => {
-                        //     var row = userSongsBody.insertRow(index);
-                        //     var cell = row.insertCell(0);
-                        //     cell.innerHTML = userSong;
-                        // });
-
                         var recommendationsBody = document.getElementById("recommendationsBody");
                         recommendationsBody.innerHTML = "";
                         data.recommendations.forEach((recommendations, index) => {
                             var row = recommendationsBody.insertRow(index);
                             var cell = row.insertCell(0);
-                            cell.innerHTML = recommendations.join(" - Score: ");
+                            cell.innerHTML = `${recommendations.title} - Album: ${recommendations.artist_name} - Score: ${recommendations.Score}`;
+
                         });
                     });
             });
@@ -433,14 +622,12 @@
                     dataType: 'json',
                     success: function (data) {
                         var songSelect = $('.js-data-example-ajax');
-
-                        // Clear existing options
                         songSelect.empty();
-
-                        // Add options for each song
                         data.songs.forEach((song, index) => {
-                            var option = new Option(data.title[index], song, false,
-                                false);
+                            var option = document.createElement("option");
+                            option.value = song.song;
+                            option.text =
+                                `${song.title} - Album: ${song.release} - Artist: ${song.artist_name}`;
                             songSelect.append(option);
                         });
 

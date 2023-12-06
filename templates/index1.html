@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='datatables.min.css') }}">
+    <!-- Thêm đường link đến lodash -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    <!-- Thêm đường link đến lodash.debounce -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/esm/utils/debounce.min.js"></script>
+    <title>Music Recommendation App</title>
+    <style>
+        .bg-w {
+            background-color: #fff !important;
+        }
+
+        .sorting_asc {
+            pointer-events: none !important;
+        }
+
+        .inspiro-slider .slide .slide-captions .strong {
+            font-size: 1.7rem !important;
+        }
+
+        .img_team {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .dataTables_filter {
+            display: none !important;
+        }
+
+        .dataTables_info {
+            display: none !important;
+        }
+
+        .dataTables_length {
+            display: none !important;
+        }
+
+        #datatable-2_paginate {
+            display: none !important;
+        }
+
+        .back-1 {
+            background-image: url("../static/Hoa_image.jpg");
+            background-size: cover;
+            height: 350px;
+            border-radius: 50%;
+        }
+
+        .back-2 {
+            background-image: url("../static/Linh_img.jpg");
+            background-size: cover;
+            height: 350px;
+            border-radius: 50%;
+        }
+
+        .back-3 {
+            background-image: url("../static/Myfa.jpeg");
+            background-size: cover;
+            height: 350px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Body Inner -->
+    <div class="body-inner">
+        <!-- Header -->
+        <header id="header" data-transparent="true" data-fullwidth="true" class="dark submenu-light">
+            <div class="header-inner">
+                <div class="container">
+                    <!--Logo-->
+                    <div id="logo">
+                        <a href="index.html">
+                            <span class="logo-default">Music Recommendation</span>
+                            <span class="logo-dark">Music Recommendation</span>
+                        </a>
+                    </div>
+                    <!--end: Navigation Resposnive Trigger-->
+
+                </div>
+            </div>
+        </header>
+        <!-- end: Header -->
+        <!-- Inspiro Slider -->
+        <div id="slider" class="inspiro-slider slider-fullscreen dots-creative" data-height-xs="360">
+            <!-- Slide 1 -->
+            <div class="slide kenburns" style="background-image:url('../static/background_1.jpeg');">
+                <div class="bg-overlay"></div>
+                <div class="container">
+                    <div class="slide-captions text-center text-light">
+                        <!-- Captions -->
+                        <h3 class="strong">Group 8</h3>
+                        <h2 class="text-dark">Music Recommendation Web<br>Enjoy your life</h2>
+                        <!--                        <a class="btn btn-primary" href="#">Purchase Now</a>-->
+                        <!--                        <a class="btn btn-light">Purchase</a>-->
+                        <!-- end: Captions -->
+                    </div>
+                </div>
+            </div>
+            <!-- end: Slide 1 -->
+            <!-- Slide 2 -->
+            <div class="slide kenburns" style="background-image:url('../static/background_2.jpg');">
+                <div class="bg-overlay"></div>
+                <div class="container">
+                    <div class="slide-captions text-center text-light">
+                        <!-- Captions -->
+                        <h3 class="strong">Group 8</h3>
+                        <h2 class="text-dark">Music Feeds The Soul</h2>
+                        <!-- end: Captions -->
+                    </div>
+                </div>
+            </div>
+            <!-- end: Slide 2 -->
+            <!-- Slide 3 -->
+            <div class="slide kenburns" style="background-image:url('../static/back_3.jpg');">
+                <div class="bg-overlay"></div>
+                <div class="container">
+                    <div class="slide-captions text-center text-light">
+                        <!-- Captions -->
+                        <h3 class="strong">Group 8</h3>
+                        <h2 class="text-dark">Music For Everyone</h2>
+                        <!-- end: Captions -->
+                    </div>
+                </div>
+            </div>
+            <!-- end: Slide 3 -->
+            <!-- Slide 4 -->
+            <div class="slide kenburns" style="background-image:url('../static/back_4.jpg');">
+                <div class="bg-overlay"></div>
+                <div class="container">
+                    <div class="slide-captions text-center text-light">
+                        <!-- Captions -->
+                        <h3 class="strong">Group 8</h3>
+                        <h2 class="text-dark">Music Is The Medicine Of The Mind</h2>
+                        <!-- end: Captions -->
+                    </div>
+                </div>
+            </div>
+            <!-- end: Slide 4 -->
+        </div>
+        <!--end: Inspiro Slider -->
+    </div>
+    <!--end: Inspiro Slider -->
+    <!-- Content -->
+    <section id="page-content" class="p-b-60 p-t-60">
+        <div class="container">
+            <div class="row">
+                <div class="form-group col-9">
+                    <label>Choose your song</label>
+                    <div class="input-group mb-3">
+                        <!-- Thêm id="songSelect" vào đây -->
+                        <select class="js-data-example-ajax form-select" id="songSelect" multiple="multiple"></select>
+                    </div>
+                </div>
+                <div class="form-group col-3">
+                    <label></label>
+                    <div class="input-group mb-3">
+                        <button id="recommendationsButton"
+                            class="btn btn-light">Get Recommendations</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- DataTable -->
+            <div class="row">
+                <!-- <div class="col-lg-6">
+                    <table id="datatable" class="table table-bordered table-hover" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>User's Songs</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userSongsBody"></tbody>
+                    </table>
+                </div> -->
+                <div class="col-lg-12">
+                    <table id="datatable-2" class="table table-bordered table-hover" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Recommendations</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recommendationsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- end: DataTable -->
+        </div>
+    </section>
+    <section class="background-grey">
+        <div class="container">
+            <div class="heading-text heading-section text-center">
+                <h2>OUR TEAM</h2>
+                <h4 class="lead">Group 8</h4>
+            </div>
+            <div class="row team-members team-members-shadow m-b-40">
+                <div class="col-lg-4">
+                    <div class="team-member">
+                        <div class="team-image back-1">
+                            <!--                                <img src="../static/Hoa_image.jpg" class="img_team">-->
+                        </div>
+                        <div class="team-desc">
+                            <h3>LE Thi Hoa</h3>
+                            <span>Student ID: 12310380</span>
+                            <p>Member</p>
+                            <div class="align-center">
+                                <a class="btn btn-xs btn-slide btn-light" href="#">
+                                    <i class="fab fa-facebook-f"></i>
+                                    <span>Facebook</span>
+                                </a>
+                                <a class="btn btn-xs btn-slide btn-light" href="#" data-width="100">
+                                    <i class="fab fa-twitter"></i>
+                                    <span>Twitter</span>
+                                </a>
+                                <a class="btn btn-xs btn-slide btn-light" href="#" data-width="118">
+                                    <i class="fab fa-instagram"></i>
+                                    <span>Instagram</span>
+                                </a>
+                                <a class="btn btn-xs btn-slide btn-light" href="mailto:#" data-width="80">
+                                    <i class="fa fa-envelope"></i>
+                                    <span>Mail</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="team-member">
+                        <div class="team-image back-2">
+                        </div>
+                        <div class="team-desc">
+                            <h3>TRAN Hai Linh</h3>
+                            <span>Student ID: 12310487</span>
+                            <p>Member</p>
+                            <div class="align-center">
+                                <a class="btn btn-xs btn-slide btn-light" href="#">
+                                    <i class="fab fa-facebook-f"></i>
+                                    <span>Facebook</span>
+                                </a>
+                                <a class="btn btn-xs btn-slide btn-light" href="#" data-width="100">
+                                    <i class="fab fa-twitter"></i>
+                                    <span>Twitter</span>
+                                </a>
+                                <a class="btn btn-xs btn-slide btn-light" href="#" data-width="118">
+                                    <i class="fab fa-instagram"></i>
+                                    <span>Instagram</span>
+                                </a>
+                                <a class="btn btn-xs btn-slide btn-light" href="mailto:#" data-width="80">
+                                    <i class="fa fa-envelope"></i>
+                                    <span>Mail</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="team-member">
+                        <div class="team-image back-3">
+                        </div>
+                        <div class="team-desc">
+                            <h3>Myrfa Yumiaji Ferra</h3>
+                            <span>Student ID: 12313695</span>
+                            <p>Member</p>
+                            <div class="align-center">
+                                <a class="btn btn-xs btn-slide btn-light" href="#">
+                                    <i class="fab fa-facebook-f"></i>
+                                    <span>Facebook</span>
+                                </a>
+                                <a class="btn btn-xs btn-slide btn-light" href="#" data-width="100">
+                                    <i class="fab fa-twitter"></i>
+                                    <span>Twitter</span>
+                                </a>
+                                <a class="btn btn-xs btn-slide btn-light" href="#" data-width="118">
+                                    <i class="fab fa-instagram"></i>
+                                    <span>Instagram</span>
+                                </a>
+                                <a class="btn btn-xs btn-slide btn-light" href="mailto:#" data-width="80">
+                                    <i class="fa fa-envelope"></i>
+                                    <span>Mail</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end: Content -->
+    <!-- Footer -->
+    <footer id="footer" class="b-t-60 bg-w">
+        <div class="footer-content">
+            <div class="container">
+                <div class="row gap-y">
+                    <div class="col-md-6 col-xl-4">
+                        <p>
+                            <a href="#"><img src="../static/LogoLyon1.png" alt="logo"></a>
+                        </p>
+                        <p>Music for everyone.</p>
+                    </div>
+                    <div class="col-6 col-md-3 col-xl-2">
+                        <!-- Footer widget area 1 -->
+                        <div class="widget">
+                            <h4>Communities</h4>
+                            <ul class="list">
+                                <li><a href="#">Updates</a></li>
+                                <li><a href="#">News</a></li>
+                            </ul>
+                        </div>
+                        <!-- end: Footer widget area 1 -->
+                    </div>
+                    <div class="col-6 col-md-3 col-xl-2">
+                        <!-- Footer widget area 2 -->
+                        <div class="widget">
+                            <h4>SUPPORT</h4>
+                            <ul class="list">
+                                <li><a href="#">Common Questions</a></li>
+                                <li><a href="#">Report a Bug</a></li>
+                                <li><a href="#">Get Help</a></li>
+                            </ul>
+                        </div>
+                        <!-- end: Footer widget area 2 -->
+                    </div>
+                    <div class="col-6 col-md-6 col-xl-2">
+                        <!-- Footer widget area 3 -->
+                        <div class="widget">
+                            <h4>Pages</h4>
+                            <ul class="list">
+                                <li><a href="#">About us</a></li>
+                                <li><a href="#">Contact</a></li>
+                                <li><a href="#">Home</a></li>
+                            </ul>
+                        </div>
+                        <!-- end: Footer widget area 3 -->
+                    </div>
+                    <div class="col-6 col-md-6 col-xl-2">
+                        <p><a class="btn btn-primary btn-block" href="#">Download Now</a></p>
+                        <br>
+                        <!-- Social icons -->
+                        <h5>FOLLOW US</h5>
+                        <div class="social-icons social-icons-colored social-icons-rounded float-left">
+                            <ul>
+                                <li class="social-rss"><a href="#"><i class="fa fa-rss"></i></a></li>
+                                <li class="social-facebook"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                <li class="social-twitter"><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                <li class="social-youtube"><a href="#"><i class="fab fa-youtube"></i></a></li>
+                            </ul>
+                        </div>
+                        <!-- end: Social icons -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright-content">
+            <div class="container">
+                <div class="copyright-text text-center">&copy; 2023 Mini Project Music Recommendation.</div>
+            </div>
+        </div>
+    </footer>
+    <!-- end: Body Inner -->
+    <!-- Scroll top -->
+    <!--    <a id="scrollTop"><i class="icon-chevron-up"></i><i class="icon-chevron-up"></i></a>-->
+    <!--Plugins-->
+    <script src="{{ url_for('static', filename='jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins.js') }}"></script>
+    <script src="{{ url_for('static', filename='functions.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!--Datatables plugin files-->
+    <script src="{{ url_for('static', filename='datatables.min.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('recommendationsButton').addEventListener('click', function () {
+                debugger;
+                // var songSelect = document.getElementById("songSelect");
+                // var selectedUser = songSelect.options[songSelect.selectedIndex].value;
+                var selectedOptions = Array.from(songSelect.selectedOptions).map(option => option.value);
+
+                fetch('/recommend', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            selected_songs: selectedOptions
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // var userSongsBody = document.getElementById("userSongsBody");
+                        // userSongsBody.innerHTML = "";
+                        // data.user_songs.forEach((userSong, index) => {
+                        //     var row = userSongsBody.insertRow(index);
+                        //     var cell = row.insertCell(0);
+                        //     cell.innerHTML = userSong;
+                        // });
+
+                        var recommendationsBody = document.getElementById("recommendationsBody");
+                        recommendationsBody.innerHTML = "";
+                        data.recommendations.forEach((recommendations, index) => {
+                            var row = recommendationsBody.insertRow(index);
+                            var cell = row.insertCell(0);
+                            cell.innerHTML = `${recommendations.title} - Album: ${recommendations.artist_name} - Score: ${recommendations.Score}`;
+
+                        });
+                    });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#datatable-2').DataTable({
+                "scrollY": "500px",
+                "scrollCollapse": true,
+                "paging": false
+            });
+
+            $('#datatable-2').DataTable();
+
+            const debouncedFetch = _.debounce(function () {
+                $.ajax({
+                    url: '/get_songs',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        var songSelect = $('.js-data-example-ajax');
+
+                        // Clear existing options
+                        songSelect.empty();
+
+                        // Add options for each song
+                        data.songs.forEach((song, index) => {
+                            var option = document.createElement("option");
+                            option.value = song.song;
+                            option.text = `${song.title} - Album: ${song.release} - Artist: ${song.artist_name}`;
+                            songSelect.append(option);
+                        });
+
+                        // Initialize Select2
+                        songSelect.select2({
+                            placeholder: "Select your songs",
+                            multiple: true,
+                            closeOnSelect: false
+                            // Add any additional Select2 options here
+                        });
+                    },
+                    error: function (error) {
+                        console.error('Error fetching songs:', error);
+                    }
+                });
+            }, 300); // Debounce for 300 milliseconds
+
+            // Use debouncedFetch when triggering the fetch
+            debouncedFetch();
+
+            function matchCustom(params, data) {
+
+                // If there are no search terms, return all of the data
+                if ($.trim(params.term) === '') {
+                    return data;
+                }
+
+                // Do not display the item if there is no 'text' property
+                if (typeof data.text === 'undefined') {
+                    return null;
+                }
+
+                // `params.term` should be the term that is used for searching
+                // `data.text` is the text that is displayed for the data object
+                if (data.text.indexOf(params.term) > -1) {
+                    var modifiedData = $.extend({}, data, true);
+                    modifiedData.text += ' (matched)';
+
+                    // You can return modified objects from here
+                    // This includes matching the `children` how you want in nested data sets
+                    return modifiedData;
+                }
+
+                // Return `null` if the term should not be displayed
+                return null;
+            }
+
+
+        });
+    </script>
+    <!--    <script src="{{ url_for('static', filename='index.js') }}"></script>-->
+</body>
